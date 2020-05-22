@@ -1,0 +1,23 @@
+<table>
+{% for comment in qs %}
+
+<tr>
+    <td>
+<h3>{{comment.comment}}<h3></td>
+    <td>
+on :<h4>{{comment.timestamp}}<h4></td>
+<td>
+near <h3>{{comment.POI_NAME}}</h3></td>
+<td>
+ at:<h5>{{comment.ST_NAME}}<h5></td>
+
+</tr>
+{% endfor %}
+</table>
+<style>
+td{
+border: 1px solid #dddddd;
+text-align: left;
+padding: 8px; 
+}
+</style>

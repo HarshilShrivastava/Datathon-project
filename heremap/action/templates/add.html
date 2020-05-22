@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+    <script type="text/javascript" src="{% static 'dist/leaflet.ajax.js' %}" >	</script>
+    <style>
+      html, body, #map {
+        height: 100%;
+      }
+    </style>
+    <script type="text/javascript">
+
+        function init() {
+            var map = L.map('map').setView([18.4951000000, 73.8258700000],12);
+            
+            // OSM Mapnik
+            var osmLink = "<a href='http://www.openstreetmap.org'>Open StreetMap</a>";   
+            L.tileLayer(
+                'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; ' + osmLink,
+                maxZoom: 18,
+            }).addTo(map);
+
+            var points = new L.GeoJSON.AJAX("{% url 'poidata' %}", {
+                onEachFeature: function(feature, layer) {
+                    layer.bindPopup("<p> Point of Interest: " + 
+                                        feature.properties.POI_NAME + "</p>" + 
+                                        "<p> ST_NAME: " + 
+                                        feature.properties.ST_NAME + "</p>" +
+                                        "<p> Latitude: " + 
+                                        feature.properties.Lat + "</p>" +
+                                        "<p> Longitude: " +
+                                        feature.properties.Lon + "</p>" +
+                                        "<iframe src='{% url 'project_iframe' %}' name='iframe_a' height='400' width='300'></iframe>" +
+                                        "<br/><a href='{% url 'comment' %}' target='iframe_a'>Write Comments</a>" +
+                                        "<br/><a href='{% url 'CommentSee' %}' target='iframe_a'>See Comments</a>"
+                                        ), {
+                                            maxWidth: 700,
+                                            maxHeight: 700
+                                        } 
+                }
+            });
+            points.addTo(map);
+        }			
+    </script>
+</head>
+<body onload=init()>
+    <div id="map"></div>
+    <!-- <div>
+        <iframe src="{% url 'project_iframe' %}" name="iframe_a" height="600" width="100%"></iframe>
+    </div> -->
+</body>
+</html>
+        
